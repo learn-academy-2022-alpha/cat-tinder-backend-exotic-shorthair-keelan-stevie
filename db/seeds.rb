@@ -16,12 +16,6 @@ cats = [
       age: 5,
       enjoys: 'Furrrrociously hunting bugs.',
       image: 'https://images.unsplash.com/photo-1492370284958-c20b15c692d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1049&q=80'
-    },
-    {
-        name: 'Jasper',
-        age: 17,
-        enjoys: 'Sunbathing and being fabulous.',
-        image: 'https://imgur.com/a/zRXpAXx'
     }
   ]
   
