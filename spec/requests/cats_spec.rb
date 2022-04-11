@@ -86,4 +86,77 @@ RSpec.describe "Cats", type: :request do
     end
   end
 
+  describe "cannot create a cat if attributes are not valid/accepted" do
+    it "cannot create a cat without a name" do
+      cat_params = {
+        cat: {
+          age: 2,
+          enjoys: 'Walks in the park',
+          image: 'https://images.unsplash.com/photo-1529778873920-4da4926a72c2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1036&q=80'
+        }
+      }
+      post "/cats", params: cat_params
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json["name"]).to include "can't be blank"
+    end
+
+    it "cannot create a cat without an age" do
+      cat_params = {
+        cat: {
+          name: 'Felix',
+          enjoys: 'Walks in the park',
+          image: 'https://images.unsplash.com/photo-1529778873920-4da4926a72c2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1036&q=80'
+        }
+      }
+      post "/cats", params: cat_params
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json["age"]).to include "can't be blank"
+    end
+
+    it "cannot create a cat without an 'enjoys' statement" do
+      cat_params = {
+        cat: {
+          name: 'Felix',
+          age: 2,
+          image: 'https://images.unsplash.com/photo-1529778873920-4da4926a72c2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1036&q=80'
+        }
+      }
+      post "/cats", params: cat_params
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json["enjoys"]).to include "can't be blank"
+    end
+
+    it "cannot create a cat with an 'enjoys' statement that is less than 10 characters long" do
+      cat_params = {
+        cat: {
+          name: 'Felix',
+          age: 2,
+          enjoys: 'stuff',
+          image: 'https://images.unsplash.com/photo-1529778873920-4da4926a72c2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1036&q=80'
+        }
+      }
+      post "/cats", params: cat_params
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json["enjoys"]).to include "is too short (minimum is 10 characters)"
+    end
+
+    it "cannot create a cat without an image" do
+      cat_params = {
+        cat: {
+          name: 'Felix',
+          age: 2,
+          enjoys: 'Walks in the park'
+        }
+      }
+      post "/cats", params: cat_params
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json["image"]).to include "can't be blank"
+    end
+  end
+
 end
